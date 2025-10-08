@@ -479,8 +479,8 @@
         </div>
         <nav>
           <ul class="nav-menu">
-            <li><a href="home.html">HOME</a></li>
-            <li><a href="ksf.html">KONSULTASI, SARAN, FEEDBACK</a></li>
+            <li><a href="home">HOME</a></li>
+            <li><a href="ksf">KONSULTASI, SARAN, FEEDBACK</a></li>
             <li>
               <a href="informasi.html" style="text-decoration: underline"
                 >INFORMASI</a
@@ -759,3 +759,4 @@
     </script>
   </body>
 </html>
+
