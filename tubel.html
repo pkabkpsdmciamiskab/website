@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <base target="_top" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Tugas Belajar - BKPSDM</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* --- Gaya Global dan Reset --- */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      body {
+        background-color: #f4f6f9;
+        color: #333;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* --- Header dan Navigasi --- */
+      .header-container {
+        background: linear-gradient(90deg, #1a5f7a 0%, #2a9d8f 100%);
+        color: white;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .logo-section h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+      }
+      .logo-section p {
+        font-size: 0.8rem;
+        opacity: 0.8;
+      }
+      .user-info {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        position: relative;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background 0.3s;
+      }
+      .user-info:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      .user-info i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+      }
+
+      /* --- User Dropdown --- */
+      .user-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: white;
+        color: #333;
+        border-radius: 5px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+      }
+      .user-dropdown.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .dropdown-header {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+      }
+      .dropdown-header h4 {
+        margin: 0 0 5px 0;
+        font-weight: 600;
+        color: #1a5f7a;
+      }
+      .dropdown-header p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #666;
+      }
+      .dropdown-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        text-align: left;
+        font-size: 0.9rem;
+      }
+      .dropdown-item:hover {
+        background-color: #f0f0f0;
+      }
+
+      /* --- Tata Letak Utama --- */
+      .main-content {
+        padding: 30px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* --- Pemilih Tahun --- */
+      .year-selector {
+        margin-bottom: 30px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 15px;
+      }
+      .year-btn {
+        padding: 10px 20px;
+        border: 2px solid #1a5f7a;
+        background-color: white;
+        color: #1a5f7a;
+        font-weight: 600;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+      }
+      .year-btn:hover {
+        background-color: #f0f7f8;
+      }
+      .year-btn.active {
+        background-color: #1a5f7a;
+        color: white;
+        box-shadow: 0 4px 8px rgba(26, 95, 122, 0.4);
+      }
+
+      /* --- Kartu Statistik --- */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+      .stat-card {
+        background-color: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: transform 0.3s;
+      }
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+      .stat-info h3 {
+        margin: 0 0 5px 0;
+        font-size: 1rem;
+        color: #777;
+        font-weight: 500;
+      }
+      .stat-info p {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 0;
+      }
+      .stat-icon {
+        font-size: 2.5rem;
+        opacity: 0.6;
+      }
+
+      /* Warna khusus untuk statistik */
+      .stat-card:nth-child(1) .stat-icon {
+        color: #e76f51;
+      }
+      .stat-card:nth-child(1) .stat-info p {
+        color: #e76f51;
+      }
+      .stat-card:nth-child(2) .stat-icon {
+        color: #2a9d8f;
+      }
+      .stat-card:nth-child(2) .stat-info p {
+        color: #2a9d8f;
+      }
+      .stat-card:nth-child(3) .stat-icon {
+        color: #f4a261;
+      }
+      .stat-card:nth-child(3) .stat-info p {
+        color: #f4a261;
+      }
+
+      /* --- Area Chart --- */
+      .chart-container {
+        background-color: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 40px;
+        height: 450px;
+        position: relative;
+      }
+
+      /* --- Alur Proses (Roadmap Zigzag Vertikal) --- */
+      .section-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #1a5f7a;
+        margin-bottom: 25px;
+        border-bottom: 3px solid #2a9d8f;
+        padding-bottom: 10px;
+      }
+
+      .process-flow {
+        position: relative;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+
+      /* Garis tengah Timeline */
+      .process-flow::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 4px;
+        background: linear-gradient(to bottom, #1a5f7a, #2a9d8f);
+        margin-left: -2px;
+      }
+
+      .process-step {
+        position: relative;
+        width: 50%;
+        margin-bottom: 40px;
+        padding: 0 20px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease-out;
+      }
+      .process-step.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Penempatan langkah genap (kanan) */
+      .process-step:nth-child(even) {
+        margin-left: 50%;
+        padding-left: 70px;
+        border-left: 2px solid #ddd;
+        border-radius: 0 8px 8px 0;
+      }
+      /* Penempatan langkah ganjil (kiri) */
+      .process-step:nth-child(odd) {
+        margin-right: 50%;
+        text-align: right;
+        padding-right: 70px;
+        border-right: 2px solid #ddd;
+        border-radius: 8px 0 0 8px;
+      }
+
+      /* Card Konten */
+      .step-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #eee;
+      }
+      .step-content h4 {
+        margin: 0 0 5px 0;
+        color: #1a5f7a;
+        font-size: 1.2rem;
+      }
+      .step-content p {
+        font-size: 0.95rem;
+        color: #666;
+        margin: 0;
+      }
+
+      /* Ikon di garis tengah */
+      .step-icon {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        background-color: #2a9d8f;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        font-size: 1.2rem;
+        border: 4px solid white;
+        box-shadow: 0 0 0 5px #1a5f7a;
+        position: absolute;
+        top: 5px;
+        z-index: 3;
+      }
+
+      /* Ikon di sisi kiri (untuk langkah ganjil) */
+      .process-step:nth-child(odd) .step-icon {
+        right: -25px;
+      }
+
+      /* Ikon di sisi kanan (untuk langkah genap) */
+      .process-step:nth-child(even) .step-icon {
+        left: -25px;
+      }
+
+      /* --- Dokumen Hukum --- */
+      .legal-docs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+      }
+      .doc-card {
+        background-color: white;
+        padding: 20px;
+        border-left: 5px solid #f4a261;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+      }
+      .doc-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      }
+      .doc-card i {
+        font-size: 2rem;
+        color: #f4a261;
+        margin-right: 15px;
+      }
+      .doc-card h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #1a5f7a;
+      }
+      .doc-card p {
+        font-size: 0.85rem;
+        color: #999;
+      }
+
+      /* --- Lembaga Pendidikan --- */
+      .institutions-section {
+        margin-top: 40px;
+      }
+      .institutions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+      .institution-card {
+        background-color: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        transition: all 0.3s;
+      }
+      .institution-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+      .institution-logo {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+        border: 3px solid #f0f0f0;
+      }
+      .institution-info {
+        flex: 1;
+      }
+      .institution-info h4 {
+        margin: 0 0 5px 0;
+        color: #1a5f7a;
+        font-size: 1.1rem;
+      }
+      .institution-info p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #666;
+      }
+      .institution-count {
+        background-color: #1a5f7a;
+        color: white;
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      .no-data {
+        text-align: center;
+        padding: 40px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        color: #666;
+      }
+      .no-data i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        color: #ddd;
+      }
+
+      /* --- Footer --- */
+      footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #34495e;
+        color: #ecf0f1;
+        font-size: 0.85rem;
+        margin-top: 40px;
+      }
+
+      /* --- Loading & Error States --- */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #1a5f7a;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .error-message {
+        background-color: #ffeaa7;
+        border: 1px solid #fdcb6e;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+        color: #e17055;
+      }
+
+      /* --- Responsiveness --- */
+      @media (max-width: 900px) {
+        .process-flow::before {
+          left: 20px;
+        }
+        .process-step {
+          width: 100%;
+          margin-left: 0;
+          padding-left: 70px;
+          padding-right: 10px;
+          border-left: 2px solid #ddd;
+          border-right: none;
+        }
+        .process-step:nth-child(even) {
+          margin-left: 0;
+          padding-left: 70px;
+          border-radius: 0 8px 8px 0;
+        }
+        .process-step:nth-child(odd) {
+          margin-right: 0;
+          text-align: left;
+          padding-right: 10px;
+          padding-left: 70px;
+          border-radius: 0 8px 8px 0;
+        }
+        .process-step:nth-child(odd) .step-icon {
+          right: auto;
+          left: -25px;
+        }
+        .process-step:nth-child(even) .step-icon {
+          left: -25px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .header-container {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 10px 20px;
+        }
+        .user-info {
+          margin-top: 10px;
+        }
+        .main-content {
+          padding: 20px;
+        }
+        .year-selector {
+          justify-content: center;
+        }
+        .institutions-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* --- Gaya untuk Section Persyaratan --- */
+      .requirements-section {
+        margin-top: 40px;
+      }
+      .requirements-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .requirements-table th {
+        background: #1a5f7a;
+        color: white;
+        padding: 1rem;
+        text-align: left;
+      }
+
+      .requirements-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+      }
+
+      .requirements-table tr:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+
+      .requirements-table tr:hover {
+        background-color: #e9f7fe;
+      }
+
+      /* --- Gaya untuk Alur Interaktif Baru --- */
+      .interactive-flow-section {
+        margin-top: 40px;
+      }
+
+      .interactive-flow-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .interactive-flow-step {
+        flex: 1;
+        min-width: 250px;
+        max-width: 300px;
+        background: white;
+        border-radius: 10px;
+        padding: 2rem 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        position: relative;
+        transition: transform 0.3s ease;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease-out;
+      }
+
+      .interactive-flow-step.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .interactive-flow-step:hover {
+        transform: translateY(-10px);
+      }
+
+      .interactive-step-number {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 40px;
+        background: #2a9d8f;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
+      .interactive-step-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #2a9d8f;
+      }
+
+      /* --- Konfigurasi API --- */
+      .api-config {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 20px 0;
+      }
+      .api-config h3 {
+        color: #856404;
+        margin-bottom: 10px;
+      }
+      .api-config input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin: 5px 0;
+      }
+      .api-config button {
+        background: #1a5f7a;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header-container">
+      <div class="logo-section">
+        <h1>Dashboard Tugas Belajar</h1>
+        <p>BKPSDM Pemerintah Provinsi</p>
+      </div>
+      <div class="user-info" id="user-info">
+        <i class="fas fa-user-circle"></i>
+        <span id="user-display">Guest</span>
+        <div class="user-dropdown" id="user-dropdown">
+          <div class="dropdown-header">
+            <h4 id="dropdown-name">Nama Pengguna</h4>
+            <p id="dropdown-username">username@domain.com</p>
+          </div>
+          <div class="dropdown-item" id="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- Konfigurasi API -->
+      <div class="api-config" id="apiConfigSection">
+        <h3>📋 Konfigurasi Spreadsheet</h3>
+        <p>Masukkan ID Spreadsheet dan API Key Anda:</p>
+        <input
+          type="text"
+          id="spreadsheetId"
+          placeholder="ID Spreadsheet (contoh: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms)"
+          style="width: 100%; margin: 10px 0; padding: 10px"
+        />
+        <input
+          type="text"
+          id="apiKey"
+          placeholder="API Key Google Sheets"
+          style="width: 100%; margin: 10px 0; padding: 10px"
+        />
+        <button onclick="saveConfig()">Simpan Konfigurasi</button>
+        <button
+          onclick="showSetupGuide()"
+          style="background: #6c757d; margin-left: 10px"
+        >
+          Cara Setup
+        </button>
+      </div>
+
+      <section class="rekapitulasi-section">
+        <h2 class="section-title">Rekapitulasi dan Statistik Tugas Belajar</h2>
+
+        <div class="year-selector">
+          <button class="year-btn active" data-year="2022">2022</button>
+          <button class="year-btn" data-year="2023">2023</button>
+          <button class="year-btn" data-year="2024">2024</button>
+          <button class="year-btn" data-year="2025">2025</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-info">
+              <h3>Total Pengajuan</h3>
+              <p id="pengajuan-count">...</p>
+            </div>
+            <i class="fas fa-file-upload stat-icon"></i>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-info">
+              <h3>Sedang Mengikuti</h3>
+              <p id="sedang-count">...</p>
+            </div>
+            <i class="fas fa-user-graduate stat-icon"></i>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-info">
+              <h3>Telah Selesai</h3>
+              <p id="selesai-count">...</p>
+            </div>
+            <i class="fas fa-check-circle stat-icon"></i>
+          </div>
+        </div>
+      </section>
+
+      <section class="chart-section">
+        <div class="chart-container">
+          <canvas id="tugasBelajarChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Alur Interaktif Baru -->
+      <section class="interactive-flow-section">
+        <h2 class="section-title">Alur Pengajuan Tugas Belajar PNS</h2>
+        <div class="interactive-flow-container">
+          <div class="interactive-flow-step">
+            <div class="interactive-step-number">1</div>
+            <div class="interactive-step-icon">📝</div>
+            <h3>Pengajuan Permohonan</h3>
+            <p>
+              Pegawai mengajukan permohonan tugas belajar kepada atasan
+              langsung.
+            </p>
+          </div>
+          <div class="interactive-flow-step">
+            <div class="interactive-step-number">2</div>
+            <div class="interactive-step-icon">✅</div>
+            <h3>Rekomendasi Atasan</h3>
+            <p>
+              Atasan memberikan rekomendasi dan meneruskan ke pimpinan unit
+              kerja.
+            </p>
+          </div>
+          <div class="interactive-flow-step">
+            <div class="interactive-step-number">3</div>
+            <div class="interactive-step-icon">📤</div>
+            <h3>Penyampaian ke BKPSDM</h3>
+            <p>
+              Pimpinan unit kerja mengirimkan berkas ke BKPSDM berupa surat
+              permohonan dan SK Tubel.
+            </p>
+          </div>
+          <div class="interactive-flow-step">
+            <div class="interactive-step-number">4</div>
+            <div class="interactive-step-icon">🔍</div>
+            <h3>Verifikasi & Pengajuan</h3>
+            <p>
+              BKPSDM melakukan verifikasi administrasi dan memproses pengajuan
+              sesuai ketentuan.
+            </p>
+          </div>
+          <div class="interactive-flow-step">
+            <div class="interactive-step-number">5</div>
+            <div class="interactive-step-icon">📨</div>
+            <h3>Penyampaian Hasil</h3>
+            <p>
+              Hasil proses dari BKPSDM disampaikan kepada pegawai yang
+              bersangkutan.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section Persyaratan -->
+      <section class="requirements-section">
+        <h2 class="section-title">Persyaratan Tugas Belajar</h2>
+        <table class="requirements-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Dokumen</th>
+              <th>Keterangan</th>
+              <th>Verifikasi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Surat Permohonan diketahui atasan langsung (form 1)</td>
+              <td>Asli</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>
+                Surat Rekomendasi tugas belajar dari Kepala OPD (form 2 & 3)
+              </td>
+              <td>Asli</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Surat Pengantar Kepala OPD (form 4)</td>
+              <td>Asli</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>SK PNS</td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>SK Jabatan</td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>
+                Pedoman Penyelenggaraan program studi (memuat tentang nama
+                program studi yang diikuti dan masa perkuliahan)
+              </td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>SK Pangkat terakhir</td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>PPK PNS 2 tahun terakhir</td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Surat Keterangan Sehat</td>
+              <td>Asli</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Surat Keterangan Tidak Sedang / Tidak Pernah (form 5)</td>
+              <td>Asli bermaterai</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>Surat Perjanjian Tugas Belajar</td>
+              <td>Asli</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>
+                Surat Keterangan Beasiswa dan/atau Surat Keterangan Lulus
+                Seleksi
+              </td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>Surat Keterangan Akreditasi Program Studi</td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td>Izin Seleksi</td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>Jadwal Kuliah</td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>Surat Persetujuan Kelas Jauh, Kelas Malam, Sabtu Minggu</td>
+              <td>Copy legalisir</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="legal-docs-section">
+        <h2 class="section-title">Dokumen Hukum Terkait</h2>
+        <div class="legal-docs-grid">
+          <div class="doc-card" data-file="PP 11 Tahun 2017">
+            <i class="fas fa-balance-scale"></i>
+            <div>
+              <h4>PP 11 Tahun 2017</h4>
+              <p>Manajemen PNS</p>
+            </div>
+          </div>
+          <div class="doc-card" data-file="PerKa BKN No. 2 Tahun 2017">
+            <i class="fas fa-balance-scale"></i>
+            <div>
+              <h4>PerKa BKN No. 2 Tahun 2017</h4>
+              <p>Tata Cara Pemberian Tugas Belajar</p>
+            </div>
+          </div>
+          <div class="doc-card" data-file="Peraturan Gubernur">
+            <i class="fas fa-balance-scale"></i>
+            <div>
+              <h4>Peraturan Gubernur</h4>
+              <p>Regulasi Tugas Belajar Daerah</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="institutions-section">
+        <h2 class="section-title">Lembaga Pendidikan Tujuan Tugas Belajar</h2>
+        <div id="institutions-container">
+          <div class="no-data">
+            <i class="fas fa-university"></i>
+            <p>Pilih tahun untuk melihat data lembaga pendidikan</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      &copy; 2025 Bidang Pengembangan Kompetensi Aparatur - BKPSDM
+    </footer>
+
+    <script>
+      // =======================================================
+      // ✅ KONFIGURASI - DISIMPAN DI LOCALSTORAGE
+      // =======================================================
+      let CONFIG = {
+        SPREADSHEET_ID: "",
+        API_KEY: "",
+      };
+
+      // Variabel global
+      let tugasBelajarChart = null;
+      let allAnnualData = {};
+
+      // Load config dari localStorage
+      function loadConfig() {
+        const savedConfig = localStorage.getItem("dashboardConfig");
+        if (savedConfig) {
+          CONFIG = JSON.parse(savedConfig);
+          document.getElementById("spreadsheetId").value =
+            CONFIG.SPREADSHEET_ID;
+          document.getElementById("apiKey").value = CONFIG.API_KEY;
+
+          // Sembunyikan config section jika sudah dikonfigurasi
+          if (CONFIG.SPREADSHEET_ID && CONFIG.API_KEY) {
+            document.getElementById("apiConfigSection").style.display = "none";
+          }
+        }
+        return CONFIG;
+      }
+
+      // Save config ke localStorage
+      function saveConfig() {
+        CONFIG.SPREADSHEET_ID = document
+          .getElementById("spreadsheetId")
+          .value.trim();
+        CONFIG.API_KEY = document.getElementById("apiKey").value.trim();
+
+        localStorage.setItem("dashboardConfig", JSON.stringify(CONFIG));
+        alert("Konfigurasi berhasil disimpan!");
+        document.getElementById("apiConfigSection").style.display = "none";
+
+        // Reload data dengan config baru
+        initializeDashboard();
+      }
+
+      // Show setup guide
+      function showSetupGuide() {
+        const guide = `
+CARA SETUP GOOGLE SHEETS API:
+
+1. 📋 BUAT SPREADSHEET:
+   - Buka sheets.google.com
+   - Buat spreadsheet baru
+   - Copy ID dari URL: https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID]/edit
+
+2. 🔑 DAPATKAN API KEY:
+   - Buka: console.cloud.google.com
+   - Buat project baru
+   - Klik "APIs & Services" > "Library"
+   - Cari "Google Sheets API" > Klik "ENABLE"
+   - Klik "Credentials" > "CREATE CREDENTIALS" > "API Key"
+   - Copy API Key yang muncul
+
+3. 📊 SETUP SPREADSHEET:
+   - Buat sheet dengan nama "Rekap"
+   - Isi data dengan format:
+     Tahun | Pengajuan | Sedang | Selesai
+     2022  | 120       | 30     | 90
+     2023  | 150       | 45     | 105
+
+4. 🔓 SHARE SPREADSHEET:
+   - Klik "Share" > "Change to anyone with the link"
+   - Pilih "Viewer"
+        `;
+        alert(guide);
+      }
+
+      // =======================================================
+      // ✅ FUNGSI UTAMA UNTUK AKSES SPREADSHEET
+      // =======================================================
+      async function fetchSheetData(sheetName) {
+        // Cek apakah config sudah lengkap
+        if (!CONFIG.SPREADSHEET_ID || !CONFIG.API_KEY) {
+          console.warn("⚠️ Config belum lengkap, menggunakan data fallback");
+          return getFallbackData(sheetName);
+        }
+
+        try {
+          const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/${sheetName}?key=${CONFIG.API_KEY}`;
+
+          console.log(`📡 Fetching: ${url}`);
+
+          const response = await fetch(url);
+
+          if (!response.ok) {
+            throw new Error(
+              `HTTP ${response.status}: ${await response.text()}`
+            );
+          }
+
+          const data = await response.json();
+
+          if (!data.values) {
+            throw new Error("Tidak ada data di sheet " + sheetName);
+          }
+
+          console.log(`✅ Data dari ${sheetName}:`, data.values);
+          return data.values;
+        } catch (error) {
+          console.error(`❌ Error mengambil data ${sheetName}:`, error);
+
+          // Tampilkan error ke user
+          if (error.message.includes("404")) {
+            alert("❌ Spreadsheet tidak ditemukan. Periksa ID Spreadsheet.");
+          } else if (error.message.includes("403")) {
+            alert(
+              "❌ Akses ditolak. Periksa API Key dan pastikan spreadsheet sudah di-share."
+            );
+          }
+
+          return getFallbackData(sheetName);
+        }
+      }
+
+      // Fungsi untuk memproses data rekap
+      async function loadAllAnnualData() {
+        try {
+          const data = await fetchSheetData("Rekap");
+
+          if (!data || data.length === 0) {
+            throw new Error("Data rekap kosong");
+          }
+
+          const rekapData = {};
+
+          // Lewati header (baris pertama)
+          for (let i = 1; i < data.length; i++) {
+            const row = data[i];
+            if (row && row.length >= 4) {
+              const tahun = row[0].toString().trim();
+              rekapData[tahun] = {
+                pengajuan: parseInt(row[1]) || 0,
+                sedang: parseInt(row[2]) || 0,
+                selesai: parseInt(row[3]) || 0,
+              };
+            }
+          }
+
+          allAnnualData = rekapData;
+          console.log("✅ Data tahunan berhasil dimuat:", allAnnualData);
+        } catch (error) {
+          console.error("❌ Gagal memuat data tahunan:", error);
+          allAnnualData = getFallbackData("allrekap");
+        }
+      }
+
+      // Fungsi untuk memproses data chart
+      async function loadChartData() {
+        try {
+          const data =
+            (await fetchSheetData("Chart")) || (await fetchSheetData("Rekap"));
+
+          const labels = [];
+          const pengajuanData = [];
+          const sedangData = [];
+          const selesaiData = [];
+
+          // Lewati header (baris pertama)
+          for (let i = 1; i < data.length; i++) {
+            const row = data[i];
+            if (row && row.length >= 4) {
+              labels.push(row[0].toString());
+              pengajuanData.push(parseInt(row[1]) || 0);
+              sedangData.push(parseInt(row[2]) || 0);
+              selesaiData.push(parseInt(row[3]) || 0);
+            }
+          }
+
+          return {
+            labels: labels,
+            datasets: [
+              {
+                label: "Pengajuan",
+                data: pengajuanData,
+                borderColor: "#e76f51",
+                backgroundColor: "rgba(231, 111, 81, 0.1)",
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+              },
+              {
+                label: "Sedang Berjalan",
+                data: sedangData,
+                borderColor: "#2a9d8f",
+                backgroundColor: "rgba(42, 157, 143, 0.1)",
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+              },
+              {
+                label: "Selesai",
+                data: selesaiData,
+                borderColor: "#f4a261",
+                backgroundColor: "rgba(244, 162, 97, 0.1)",
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+              },
+            ],
+          };
+        } catch (error) {
+          console.error("❌ Gagal memuat data chart:", error);
+          return getFallbackData("annual_chart");
+        }
+      }
+
+      // Fallback data
+      function getFallbackData(type) {
+        console.log(`🔄 Menggunakan data fallback untuk ${type}`);
+
+        if (type === "Rekap" || type === "allrekap") {
+          return [
+            ["Tahun", "Pengajuan", "Sedang", "Selesai"],
+            ["2022", "120", "30", "90"],
+            ["2023", "150", "45", "105"],
+            ["2024", "200", "60", "140"],
+            ["2025", "180", "55", "125"],
+          ];
+        }
+
+        if (type === "Chart" || type === "annual_chart") {
+          return {
+            labels: ["2022", "2023", "2024", "2025"],
+            datasets: [
+              {
+                label: "Pengajuan",
+                data: [120, 150, 200, 180],
+                borderColor: "#e76f51",
+                backgroundColor: "rgba(231, 111, 81, 0.1)",
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+              },
+              {
+                label: "Sedang Berjalan",
+                data: [30, 45, 60, 55],
+                borderColor: "#2a9d8f",
+                backgroundColor: "rgba(42, 157, 143, 0.1)",
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+              },
+              {
+                label: "Selesai",
+                data: [90, 105, 140, 125],
+                borderColor: "#f4a261",
+                backgroundColor: "rgba(244, 162, 97, 0.1)",
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+              },
+            ],
+          };
+        }
+
+        return null;
+      }
+
+      // Fungsi-fungsi lainnya
+      function updateStats(year) {
+        const yearData = allAnnualData[year];
+        if (yearData) {
+          document.getElementById("pengajuan-count").textContent =
+            yearData.pengajuan || 0;
+          document.getElementById("sedang-count").textContent =
+            yearData.sedang || 0;
+          document.getElementById("selesai-count").textContent =
+            yearData.selesai || 0;
+        }
+      }
+
+      async function updateChart() {
+        const ctx = document
+          .getElementById("tugasBelajarChart")
+          .getContext("2d");
+        if (tugasBelajarChart) tugasBelajarChart.destroy();
+
+        const chartData = await loadChartData();
+        tugasBelajarChart = new Chart(ctx, {
+          type: "line",
+          data: chartData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: "top" },
+              title: {
+                display: true,
+                text: "Tren Statistik Tugas Belajar 4 Tahun Terakhir",
+              },
+            },
+          },
+        });
+      }
+
+      function setActiveYear(year) {
+        document
+          .querySelectorAll(".year-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        document
+          .querySelector(`.year-btn[data-year="${year}"]`)
+          .classList.add("active");
+        updateStats(year);
+      }
+
+      // Fungsi untuk animasi process steps
+      function animateProcessSteps() {
+        const steps = document.querySelectorAll(".process-step");
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+              }
+            });
+          },
+          { threshold: 0.3 }
+        );
+
+        steps.forEach((step) => observer.observe(step));
+      }
+
+      // Fungsi untuk animasi alur interaktif baru
+      function animateInteractiveFlow() {
+        const steps = document.querySelectorAll(".interactive-flow-step");
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+              } else {
+                entry.target.classList.remove("visible");
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+
+        steps.forEach((step) => observer.observe(step));
+      }
+
+      // Fungsi untuk interaksi dokumen hukum
+      function setupLegalDocsInteractions() {
+        const docCards = document.querySelectorAll(".doc-card");
+        docCards.forEach((card) => {
+          card.addEventListener("click", function () {
+            const fileName = this.getAttribute("data-file");
+            alert(
+              `Fitur ini akan mengarahkan ke halaman/link unduh dokumen: ${fileName}.`
+            );
+          });
+        });
+      }
+
+      // Fungsi login
+      function checkLoginStatus() {
+        const userDisplay = document.getElementById("user-display");
+        const userInfo = document.getElementById("user-info");
+        const userDropdown = document.getElementById("user-dropdown");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        const loginData = localStorage.getItem("loginData");
+        if (loginData) {
+          const userData = JSON.parse(loginData);
+          userDisplay.textContent = userData.name;
+
+          userInfo.addEventListener("click", function (e) {
+            e.stopPropagation();
+            userDropdown.classList.toggle("active");
+          });
+
+          document.addEventListener("click", function () {
+            userDropdown.classList.remove("active");
+          });
+
+          logoutBtn.addEventListener("click", function () {
+            localStorage.removeItem("loginData");
+            alert("Anda telah logout.");
+            window.location.reload();
+          });
+        } else {
+          userDisplay.textContent = "Guest";
+        }
+      }
+
+      // Initialize dashboard
+      async function initializeDashboard() {
+        console.log("🚀 Memulai dashboard...");
+
+        // Load config pertama kali
+        loadConfig();
+
+        await loadAllAnnualData();
+        setActiveYear("2024");
+        await updateChart();
+
+        // Setup other functionalities
+        animateProcessSteps();
+        animateInteractiveFlow();
+        setupLegalDocsInteractions();
+        checkLoginStatus();
+
+        // Event listeners
+        document.querySelectorAll(".year-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const year = this.getAttribute("data-year");
+            setActiveYear(year);
+          });
+        });
+
+        console.log("✅ Dashboard berhasil diinisialisasi");
+      }
+
+      // Start when page loads
+      document.addEventListener("DOMContentLoaded", initializeDashboard);
+    </script>
+  </body>
+</html>
