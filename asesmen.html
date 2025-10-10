@@ -262,6 +262,18 @@
         align-items: center;
         text-align: center;
       }
+.modal {
+  display: none; /* pastikan ini ada */
+  position: fixed;
+  z-index: 1000;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+}
 
       .ebook-cover {
         width: 200px;
@@ -893,10 +905,35 @@
         }
 
         // Tombol Lihat
-        viewBtn.addEventListener("click", function () {
-          viewCount++;
-          updateStats();
-          alert("Membuka ebook 'Asesmen Potensi dan Kompetensi'...");
+        
+        <script>
+  // Ambil elemen yang dibutuhkan
+  const modal = document.getElementById("ebookModal");
+  const btn = document.getElementById("view-btn");
+  const span = document.querySelector(".close-btn");
+
+  // Saat tombol diklik, tampilkan modal
+  btn.onclick = function () {
+    modal.style.display = "block";
+  };
+
+  // Saat tombol close diklik, sembunyikan modal
+  span.onclick = function () {
+    modal.style.display = "none";
+  };
+
+  // Saat klik area di luar modal, tutup juga
+  window.onclick = function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  };
+
+        
+    //    viewBtn.addEventListener("click", function () {
+      //    viewCount++;
+        //  updateStats();
+          //alert("Membuka ebook 'Asesmen Potensi dan Kompetensi'...");
           // Di sini bisa diarahkan ke halaman pembaca ebook
         });
 
