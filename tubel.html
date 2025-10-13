@@ -117,8 +117,9 @@
         max-width: 1400px;
         margin: 0 auto;
       }
-/* --- back to home --- */
- .back-button {
+
+      /* --- back to home --- */
+      .back-button {
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -134,10 +135,10 @@
 
       .back-button:hover {
         background: #144b61;
-      }     
-      
+      }
+
       /* --- Pemilih Tahun --- */
-      .year-selector {
+      .year-buttons {
         margin-bottom: 30px;
         display: flex;
         gap: 10px;
@@ -145,7 +146,7 @@
         border-bottom: 2px solid #ddd;
         padding-bottom: 15px;
       }
-      .year-btn {
+      .year-buttons button {
         padding: 10px 20px;
         border: 2px solid #1a5f7a;
         background-color: white;
@@ -156,23 +157,23 @@
         transition: all 0.3s;
         font-size: 0.9rem;
       }
-      .year-btn:hover {
+      .year-buttons button:hover {
         background-color: #f0f7f8;
       }
-      .year-btn.active {
+      .year-buttons button.active {
         background-color: #1a5f7a;
         color: white;
         box-shadow: 0 4px 8px rgba(26, 95, 122, 0.4);
       }
 
       /* --- Kartu Statistik --- */
-      .stats-grid {
+      .cards {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 25px;
         margin-bottom: 40px;
       }
-      .stat-card {
+      .card {
         background-color: white;
         border-radius: 12px;
         padding: 25px;
@@ -182,43 +183,43 @@
         align-items: center;
         transition: transform 0.3s;
       }
-      .stat-card:hover {
+      .card:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       }
-      .stat-info h3 {
+      .card h3 {
         margin: 0 0 5px 0;
         font-size: 1rem;
         color: #777;
         font-weight: 500;
       }
-      .stat-info p {
+      .card p {
         font-size: 2.2rem;
         font-weight: 700;
         margin: 0;
       }
-      .stat-icon {
+      .card i {
         font-size: 2.5rem;
         opacity: 0.6;
       }
 
       /* Warna khusus untuk statistik */
-      .stat-card:nth-child(1) .stat-icon {
+      .card:nth-child(1) i {
         color: #e76f51;
       }
-      .stat-card:nth-child(1) .stat-info p {
+      .card:nth-child(1) p {
         color: #e76f51;
       }
-      .stat-card:nth-child(2) .stat-icon {
+      .card:nth-child(2) i {
         color: #2a9d8f;
       }
-      .stat-card:nth-child(2) .stat-info p {
+      .card:nth-child(2) p {
         color: #2a9d8f;
       }
-      .stat-card:nth-child(3) .stat-icon {
+      .card:nth-child(3) i {
         color: #f4a261;
       }
-      .stat-card:nth-child(3) .stat-info p {
+      .card:nth-child(3) p {
         color: #f4a261;
       }
 
@@ -374,10 +375,10 @@
       }
 
       /* --- Lembaga Pendidikan --- */
-      .institutions-section {
+      .institutions {
         margin-top: 40px;
       }
-      .institutions-grid {
+      .institution-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 20px;
@@ -521,10 +522,10 @@
         .main-content {
           padding: 20px;
         }
-        .year-selector {
+        .year-buttons {
           justify-content: center;
         }
-        .institutions-grid {
+        .institution-grid {
           grid-template-columns: 1fr;
         }
       }
@@ -622,42 +623,13 @@
         margin-bottom: 1rem;
         color: #2a9d8f;
       }
-
-      /* --- Konfigurasi API --- */
-      .api-config {
-        background: #fff3cd;
-        border: 1px solid #ffeaa7;
-        border-radius: 8px;
-        padding: 15px;
-        margin: 20px 0;
-      }
-      .api-config h3 {
-        color: #856404;
-        margin-bottom: 10px;
-      }
-      .api-config input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        margin: 5px 0;
-      }
-      .api-config button {
-        background: #1a5f7a;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-      }
     </style>
   </head>
   <body>
     <header class="header-container">
       <div class="logo-section">
         <h1>Dashboard Tugas Belajar</h1>
-        <p>Bidang PKA
-          BKPSDM Kabupaten Ciamis</p>
+        <p>Bidang PKA BKPSDM Kabupaten Ciamis</p>
       </div>
       <div class="user-info" id="user-info">
         <i class="fas fa-user-circle"></i>
@@ -675,75 +647,31 @@
     </header>
 
     <main class="main-content">
-      <!-- Konfigurasi API -->
-      <div class="api-config" id="apiConfigSection">
-        <h3>📋 Konfigurasi Spreadsheet</h3>
-        <p>Masukkan ID Spreadsheet dan API Key Anda:</p>
-        <input
-          type="text"
-          id="spreadsheetId"
-          placeholder="ID Spreadsheet (contoh: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms)"
-          style="width: 100%; margin: 10px 0; padding: 10px"
-        />
-        <input
-          type="text"
-          id="apiKey"
-          placeholder="API Key Google Sheets"
-          style="width: 100%; margin: 10px 0; padding: 10px"
-        />
-        <button onclick="saveConfig()">Simpan Konfigurasi</button>
-        <button
-          onclick="showSetupGuide()"
-          style="background: #6c757d; margin-left: 10px"
-        >
-          Cara Setup
-        </button>
-      </div>
-
       <section class="rekapitulasi-section">
-         <a href="home.html" class="back-button">
-        <i class="fas fa-arrow-left"></i> Kembali ke Home
-      </a>
-        <br>
+        <a href="home.html" class="back-button">
+          <i class="fas fa-arrow-left"></i> Kembali ke Home
+        </a>
+        <br />
         <h2 class="section-title">Rekapitulasi dan Statistik Tugas Belajar</h2>
 
-        <div class="year-selector">
-          <button class="year-btn active" data-year="2022">2022</button>
-          <button class="year-btn" data-year="2023">2023</button>
-          <button class="year-btn" data-year="2024">2024</button>
-          <button class="year-btn" data-year="2025">2025</button>
+        <!-- Bagian yang diganti -->
+        <div class="year-buttons">
+          <button class="active" onclick="changeYear(2025)">2025</button>
+          <button onclick="changeYear(2024)">2024</button>
+          <button onclick="changeYear(2023)">2023</button>
+          <button onclick="changeYear(2022)">2022</button>
         </div>
 
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-info">
-              <h3>Total Pengajuan</h3>
-              <p id="pengajuan-count">...</p>
-            </div>
-            <i class="fas fa-file-upload stat-icon"></i>
-          </div>
-
-          <div class="stat-card">
-            <div class="stat-info">
-              <h3>Sedang Mengikuti</h3>
-              <p id="sedang-count">...</p>
-            </div>
-            <i class="fas fa-user-graduate stat-icon"></i>
-          </div>
-
-          <div class="stat-card">
-            <div class="stat-info">
-              <h3>Telah Selesai</h3>
-              <p id="selesai-count">...</p>
-            </div>
-            <i class="fas fa-check-circle stat-icon"></i>
+        <div class="cards" id="statsCards">
+          <!-- Kartu statistik akan diisi oleh JavaScript -->
+          <div class="loading-container">
+            <div class="loading"></div>
+            <p>Memuat data statistik...</p>
           </div>
         </div>
-      </section>
 
-      <section class="chart-section">
         <div class="chart-container">
-          <canvas id="tugasBelajarChart"></canvas>
+          <canvas id="tubelChart"></canvas>
         </div>
       </section>
 
@@ -808,7 +736,7 @@
               <th>No</th>
               <th>Dokumen</th>
               <th>Keterangan</th>
-             <!-- <th>Verifikasi</th> -->
+              <!-- <th>Verifikasi</th> -->
             </tr>
           </thead>
           <tbody>
@@ -816,7 +744,6 @@
               <td>1</td>
               <td>Surat Permohonan diketahui atasan langsung (form 1)</td>
               <td>Asli</td>
-            
             </tr>
             <tr>
               <td>2</td>
@@ -933,351 +860,293 @@
         </div>
       </section>
 
-      <section class="institutions-section">
-        <h2 class="section-title">Lembaga Pendidikan Tujuan Tugas Belajar</h2>
-        <div id="institutions-container">
-          <div class="no-data">
-            <i class="fas fa-university"></i>
-            <p>Pilih tahun untuk melihat data lembaga pendidikan</p>
+      <!-- Bagian Lembaga Pendidikan yang diganti -->
+      <section class="institutions">
+        <h2 class="section-title">
+          Lembaga Pendidikan (Urut Berdasarkan Peminat)
+        </h2>
+        <div class="institution-grid" id="institutionList">
+          <!-- Data lembaga pendidikan akan diisi oleh JavaScript -->
+          <div class="loading-container">
+            <div class="loading"></div>
+            <p>Memuat data lembaga pendidikan...</p>
           </div>
         </div>
       </section>
     </main>
 
     <footer>
-      &copy; 2025 Bidang Pengembangan Kompetensi Aparatur - BKPSDM Kabupaten Ciamis
+      &copy; 2025 Bidang Pengembangan Kompetensi Aparatur - BKPSDM Kabupaten
+      Ciamis
     </footer>
 
     <script>
-      // =======================================================
-      // ✅ KONFIGURASI - DISIMPAN DI LOCALSTORAGE
-      // =======================================================
-      let CONFIG = {
-        SPREADSHEET_ID: "",
-        API_KEY: "",
-      };
+      // URL Google Apps Script untuk mengambil data dari spreadsheet
+      const scriptUrl =
+        "https://script.google.com/macros/s/AKfycbyhf3tw8HX2NH8UVOsMZPoOBx-MhdtYVM5jCTN2JchNNpUsbE2BBCH0EOL0hvaxPCIt/exec";
 
-      // Variabel global
-      let tugasBelajarChart = null;
-      let allAnnualData = {};
+      let allData = {};
+      let chart;
 
-      // Load config dari localStorage
-      function loadConfig() {
-        const savedConfig = localStorage.getItem("dashboardConfig");
-        if (savedConfig) {
-          CONFIG = JSON.parse(savedConfig);
-          document.getElementById("spreadsheetId").value =
-            CONFIG.SPREADSHEET_ID;
-          document.getElementById("apiKey").value = CONFIG.API_KEY;
+      // Fungsi untuk mengambil data dari spreadsheet
+      async function fetchData() {
+        try {
+          // Tampilkan loading state
+          document.getElementById("statsCards").innerHTML = `
+            <div class="loading-container" style="text-align: center; grid-column: 1 / -1;">
+              <div class="loading"></div>
+              <p>Memuat data statistik...</p>
+            </div>
+          `;
 
-          // Sembunyikan config section jika sudah dikonfigurasi
-          if (CONFIG.SPREADSHEET_ID && CONFIG.API_KEY) {
-            document.getElementById("apiConfigSection").style.display = "none";
+          document.getElementById("institutionList").innerHTML = `
+            <div class="loading-container" style="text-align: center; grid-column: 1 / -1;">
+              <div class="loading"></div>
+              <p>Memuat data lembaga pendidikan...</p>
+            </div>
+          `;
+
+          const res = await fetch(scriptUrl);
+
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
           }
+
+          const data = await res.json();
+          allData = data;
+
+          // Update UI dengan data yang diterima
+          updateCards(2025);
+          renderChart();
+          renderInstitutions(data.institutions);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+
+          // Tampilkan pesan error
+          document.getElementById("statsCards").innerHTML = `
+            <div class="error-message" style="grid-column: 1 / -1;">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>Gagal memuat data statistik: ${error.message}</p>
+              <button onclick="fetchData()" style="margin-top: 10px; padding: 8px 16px; background: #1a5f7a; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Coba Lagi
+              </button>
+            </div>
+          `;
+
+          document.getElementById("institutionList").innerHTML = `
+            <div class="error-message" style="grid-column: 1 / -1;">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>Gagal memuat data lembaga pendidikan: ${error.message}</p>
+              <button onclick="fetchData()" style="margin-top: 10px; padding: 8px 16px; background: #1a5f7a; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Coba Lagi
+              </button>
+            </div>
+          `;
+
+          // Gunakan data fallback jika ada error
+          useFallbackData();
         }
-        return CONFIG;
       }
 
-      // Save config ke localStorage
-      function saveConfig() {
-        CONFIG.SPREADSHEET_ID = document
-          .getElementById("spreadsheetId")
-          .value.trim();
-        CONFIG.API_KEY = document.getElementById("apiKey").value.trim();
+      // Data fallback jika terjadi error
+      function useFallbackData() {
+        const fallbackData = {
+          stats: [
+            { year: 2022, total: 120, proses: 30, selesai: 90 },
+            { year: 2023, total: 150, proses: 45, selesai: 105 },
+            { year: 2024, total: 200, proses: 60, selesai: 140 },
+            { year: 2025, total: 180, proses: 55, selesai: 125 },
+          ],
+          institutions: [
+            {
+              nama: "Universitas Gadjah Mada",
+              peminat: 45,
+              logo: "https://upload.wikimedia.org/wikipedia/id/thumb/6/6d/Logo_UGM.png/200px-Logo_UGM.png",
+            },
+            {
+              nama: "Institut Teknologi Bandung",
+              peminat: 38,
+              logo: "https://upload.wikimedia.org/wikipedia/id/thumb/9/95/Logo_ITB.png/200px-Logo_ITB.png",
+            },
+            {
+              nama: "Universitas Indonesia",
+              peminat: 35,
+              logo: "https://upload.wikimedia.org/wikipedia/id/thumb/0/0a/Logo_Universitas_Indonesia.png/200px-Logo_Universitas_Indonesia.png",
+            },
+            {
+              nama: "Universitas Padjadjaran",
+              peminat: 32,
+              logo: "https://upload.wikimedia.org/wikipedia/id/thumb/9/9c/Logo_Unpad.png/200px-Logo_Unpad.png",
+            },
+            {
+              nama: "Universitas Pendidikan Indonesia",
+              peminat: 28,
+              logo: "https://upload.wikimedia.org/wikipedia/id/thumb/5/5c/Logo_UPI.png/200px-Logo_UPI.png",
+            },
+            {
+              nama: "Institut Pertanian Bogor",
+              peminat: 25,
+              logo: "https://upload.wikimedia.org/wikipedia/id/thumb/6/6d/Logo_IPB_University.png/200px-Logo_IPB_University.png",
+            },
+          ],
+        };
 
-        localStorage.setItem("dashboardConfig", JSON.stringify(CONFIG));
-        alert("Konfigurasi berhasil disimpan!");
-        document.getElementById("apiConfigSection").style.display = "none";
+        allData = fallbackData;
+        updateCards(2025);
+        renderChart();
+        renderInstitutions(fallbackData.institutions);
 
-        // Reload data dengan config baru
-        initializeDashboard();
-      }
-
-      // Show setup guide
-      function showSetupGuide() {
-        const guide = `
-CARA SETUP GOOGLE SHEETS API:
-
-1. 📋 BUAT SPREADSHEET:
-   - Buka sheets.google.com
-   - Buat spreadsheet baru
-   - Copy ID dari URL: https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID]/edit
-
-2. 🔑 DAPATKAN API KEY:
-   - Buka: console.cloud.google.com
-   - Buat project baru
-   - Klik "APIs & Services" > "Library"
-   - Cari "Google Sheets API" > Klik "ENABLE"
-   - Klik "Credentials" > "CREATE CREDENTIALS" > "API Key"
-   - Copy API Key yang muncul
-
-3. 📊 SETUP SPREADSHEET:
-   - Buat sheet dengan nama "Rekap"
-   - Isi data dengan format:
-     Tahun | Pengajuan | Sedang | Selesai
-     2022  | 120       | 30     | 90
-     2023  | 150       | 45     | 105
-
-4. 🔓 SHARE SPREADSHEET:
-   - Klik "Share" > "Change to anyone with the link"
-   - Pilih "Viewer"
+        // Tampilkan notifikasi bahwa menggunakan data fallback
+        const notification = document.createElement("div");
+        notification.className = "error-message";
+        notification.innerHTML = `
+          <i class="fas fa-info-circle"></i>
+          <p>Menggunakan data contoh karena koneksi ke server terhambat. Data mungkin tidak terbaru.</p>
         `;
-        alert(guide);
+        document.querySelector(".rekapitulasi-section").prepend(notification);
       }
 
-      // =======================================================
-      // ✅ FUNGSI UTAMA UNTUK AKSES SPREADSHEET
-      // =======================================================
-      async function fetchSheetData(sheetName) {
-        // Cek apakah config sudah lengkap
-        if (!CONFIG.SPREADSHEET_ID || !CONFIG.API_KEY) {
-          console.warn("⚠️ Config belum lengkap, menggunakan data fallback");
-          return getFallbackData(sheetName);
-        }
-
-        try {
-          const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/${sheetName}?key=${CONFIG.API_KEY}`;
-
-          console.log(`📡 Fetching: ${url}`);
-
-          const response = await fetch(url);
-
-          if (!response.ok) {
-            throw new Error(
-              `HTTP ${response.status}: ${await response.text()}`
-            );
-          }
-
-          const data = await response.json();
-
-          if (!data.values) {
-            throw new Error("Tidak ada data di sheet " + sheetName);
-          }
-
-          console.log(`✅ Data dari ${sheetName}:`, data.values);
-          return data.values;
-        } catch (error) {
-          console.error(`❌ Error mengambil data ${sheetName}:`, error);
-
-          // Tampilkan error ke user
-          if (error.message.includes("404")) {
-            alert("❌ Spreadsheet tidak ditemukan. Periksa ID Spreadsheet.");
-          } else if (error.message.includes("403")) {
-            alert(
-              "❌ Akses ditolak. Periksa API Key dan pastikan spreadsheet sudah di-share."
-            );
-          }
-
-          return getFallbackData(sheetName);
-        }
+      // Fungsi untuk mengubah tahun yang aktif
+      function changeYear(year) {
+        document.querySelectorAll(".year-buttons button").forEach((btn) => {
+          btn.classList.remove("active");
+          if (btn.textContent == year) btn.classList.add("active");
+        });
+        updateCards(year);
       }
 
-      // Fungsi untuk memproses data rekap
-      async function loadAllAnnualData() {
-        try {
-          const data = await fetchSheetData("Rekap");
-
-          if (!data || data.length === 0) {
-            throw new Error("Data rekap kosong");
-          }
-
-          const rekapData = {};
-
-          // Lewati header (baris pertama)
-          for (let i = 1; i < data.length; i++) {
-            const row = data[i];
-            if (row && row.length >= 4) {
-              const tahun = row[0].toString().trim();
-              rekapData[tahun] = {
-                pengajuan: parseInt(row[1]) || 0,
-                sedang: parseInt(row[2]) || 0,
-                selesai: parseInt(row[3]) || 0,
-              };
-            }
-          }
-
-          allAnnualData = rekapData;
-          console.log("✅ Data tahunan berhasil dimuat:", allAnnualData);
-        } catch (error) {
-          console.error("❌ Gagal memuat data tahunan:", error);
-          allAnnualData = getFallbackData("allrekap");
+      // Fungsi untuk memperbarui kartu statistik
+      function updateCards(year) {
+        const data = allData.stats?.find((d) => d.year == year);
+        const container = document.getElementById("statsCards");
+        if (!data) {
+          container.innerHTML = `
+            <div class="error-message" style="grid-column: 1 / -1;">
+              <p>Data untuk tahun ${year} tidak tersedia</p>
+            </div>
+          `;
+          return;
         }
+
+        container.innerHTML = `
+          <div class="card">
+            <div class="stat-info">
+              <h3>Total Peserta</h3>
+              <p>${data.total}</p>
+            </div>
+            <i class="fas fa-users stat-icon"></i>
+          </div>
+          <div class="card">
+            <div class="stat-info">
+              <h3>Dalam Proses</h3>
+              <p>${data.proses}</p>
+            </div>
+            <i class="fas fa-sync-alt stat-icon"></i>
+          </div>
+          <div class="card">
+            <div class="stat-info">
+              <h3>Selesai</h3>
+              <p>${data.selesai}</p>
+            </div>
+            <i class="fas fa-check-circle stat-icon"></i>
+          </div>
+        `;
       }
 
-      // Fungsi untuk memproses data chart
-      async function loadChartData() {
-        try {
-          const data =
-            (await fetchSheetData("Chart")) || (await fetchSheetData("Rekap"));
+      // Fungsi untuk merender chart
+      function renderChart() {
+        const ctx = document.getElementById("tubelChart").getContext("2d");
+        const labels = ["2022", "2023", "2024", "2025"];
 
-          const labels = [];
-          const pengajuanData = [];
-          const sedangData = [];
-          const selesaiData = [];
+        const totals = labels.map(
+          (y) => allData.stats?.find((d) => d.year == y)?.total || 0
+        );
+        const proses = labels.map(
+          (y) => allData.stats?.find((d) => d.year == y)?.proses || 0
+        );
+        const selesai = labels.map(
+          (y) => allData.stats?.find((d) => d.year == y)?.selesai || 0
+        );
 
-          // Lewati header (baris pertama)
-          for (let i = 1; i < data.length; i++) {
-            const row = data[i];
-            if (row && row.length >= 4) {
-              labels.push(row[0].toString());
-              pengajuanData.push(parseInt(row[1]) || 0);
-              sedangData.push(parseInt(row[2]) || 0);
-              selesaiData.push(parseInt(row[3]) || 0);
-            }
-          }
+        if (chart) chart.destroy(); // biar gak dobel saat reload chart
 
-          return {
-            labels: labels,
-            datasets: [
-              {
-                label: "Pengajuan",
-                data: pengajuanData,
-                borderColor: "#e76f51",
-                backgroundColor: "rgba(231, 111, 81, 0.1)",
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-              },
-              {
-                label: "Sedang Berjalan",
-                data: sedangData,
-                borderColor: "#2a9d8f",
-                backgroundColor: "rgba(42, 157, 143, 0.1)",
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-              },
-              {
-                label: "Selesai",
-                data: selesaiData,
-                borderColor: "#f4a261",
-                backgroundColor: "rgba(244, 162, 97, 0.1)",
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-              },
-            ],
-          };
-        } catch (error) {
-          console.error("❌ Gagal memuat data chart:", error);
-          return getFallbackData("annual_chart");
-        }
-      }
-
-      // Fallback data
-      function getFallbackData(type) {
-        console.log(`🔄 Menggunakan data fallback untuk ${type}`);
-
-        if (type === "Rekap" || type === "allrekap") {
-          return [
-            ["Tahun", "Pengajuan", "Sedang", "Selesai"],
-            ["2022", "120", "30", "90"],
-            ["2023", "150", "45", "105"],
-            ["2024", "200", "60", "140"],
-            ["2025", "180", "55", "125"],
-          ];
-        }
-
-        if (type === "Chart" || type === "annual_chart") {
-          return {
-            labels: ["2022", "2023", "2024", "2025"],
-            datasets: [
-              {
-                label: "Pengajuan",
-                data: [120, 150, 200, 180],
-                borderColor: "#e76f51",
-                backgroundColor: "rgba(231, 111, 81, 0.1)",
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-              },
-              {
-                label: "Sedang Berjalan",
-                data: [30, 45, 60, 55],
-                borderColor: "#2a9d8f",
-                backgroundColor: "rgba(42, 157, 143, 0.1)",
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-              },
-              {
-                label: "Selesai",
-                data: [90, 105, 140, 125],
-                borderColor: "#f4a261",
-                backgroundColor: "rgba(244, 162, 97, 0.1)",
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-              },
-            ],
-          };
-        }
-
-        return null;
-      }
-
-      // Fungsi-fungsi lainnya
-      function updateStats(year) {
-        const yearData = allAnnualData[year];
-        if (yearData) {
-          document.getElementById("pengajuan-count").textContent =
-            yearData.pengajuan || 0;
-          document.getElementById("sedang-count").textContent =
-            yearData.sedang || 0;
-          document.getElementById("selesai-count").textContent =
-            yearData.selesai || 0;
-        }
-      }
-
-      async function updateChart() {
-        const ctx = document
-          .getElementById("tugasBelajarChart")
-          .getContext("2d");
-        if (tugasBelajarChart) tugasBelajarChart.destroy();
-
-        const chartData = await loadChartData();
-        tugasBelajarChart = new Chart(ctx, {
+        chart = new Chart(ctx, {
           type: "line",
-          data: chartData,
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Total Peserta",
+                data: totals,
+                borderColor: "#e76f51",
+                backgroundColor: "rgba(231, 111, 81, 0.1)",
+                tension: 0.3,
+                fill: true,
+              },
+              {
+                label: "Dalam Proses",
+                data: proses,
+                borderColor: "#2a9d8f",
+                backgroundColor: "rgba(42, 157, 143, 0.1)",
+                tension: 0.3,
+                fill: true,
+              },
+              {
+                label: "Selesai",
+                data: selesai,
+                borderColor: "#f4a261",
+                backgroundColor: "rgba(244, 162, 97, 0.1)",
+                tension: 0.3,
+                fill: true,
+              },
+            ],
+          },
           options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-              legend: { position: "top" },
+              legend: { display: true, position: "top" },
               title: {
                 display: true,
-                text: "Tren Statistik Tugas Belajar 4 Tahun Terakhir",
+                text: "Tren Peserta Tugas Belajar (2022–2025)",
               },
+            },
+            scales: {
+              y: { beginAtZero: true },
             },
           },
         });
       }
 
-      function setActiveYear(year) {
-        document
-          .querySelectorAll(".year-btn")
-          .forEach((btn) => btn.classList.remove("active"));
-        document
-          .querySelector(`.year-btn[data-year="${year}"]`)
-          .classList.add("active");
-        updateStats(year);
-      }
+      // Fungsi untuk merender daftar lembaga pendidikan
+      function renderInstitutions(institutions) {
+        if (!institutions || institutions.length === 0) {
+          const container = document.getElementById("institutionList");
+          container.innerHTML = `
+            <div class="no-data" style="grid-column: 1 / -1;">
+              <i class="fas fa-university"></i>
+              <p>Data lembaga pendidikan tidak tersedia</p>
+            </div>
+          `;
+          return;
+        }
 
-      // Fungsi untuk animasi process steps
-      function animateProcessSteps() {
-        const steps = document.querySelectorAll(".process-step");
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-              }
-            });
-          },
-          { threshold: 0.3 }
-        );
-
-        steps.forEach((step) => observer.observe(step));
+        const sorted = institutions.sort((a, b) => b.peminat - a.peminat);
+        const container = document.getElementById("institutionList");
+        container.innerHTML = sorted
+          .map(
+            (inst) => `
+          <div class="institution-card">
+            <img src="${
+              inst.logo || "https://via.placeholder.com/60"
+            }" class="institution-logo" />
+            <div class="institution-info">
+              <h4>${inst.nama}</h4>
+              <p>${inst.peminat} Peminat</p>
+            </div>
+          </div>`
+          )
+          .join("");
       }
 
       // Fungsi untuk animasi alur interaktif baru
@@ -1344,29 +1213,16 @@ CARA SETUP GOOGLE SHEETS API:
       }
 
       // Initialize dashboard
-      async function initializeDashboard() {
+      function initializeDashboard() {
         console.log("🚀 Memulai dashboard...");
 
-        // Load config pertama kali
-        loadConfig();
-
-        await loadAllAnnualData();
-        setActiveYear("2024");
-        await updateChart();
+        // Ambil data dari spreadsheet
+        fetchData();
 
         // Setup other functionalities
-        animateProcessSteps();
         animateInteractiveFlow();
         setupLegalDocsInteractions();
         checkLoginStatus();
-
-        // Event listeners
-        document.querySelectorAll(".year-btn").forEach((btn) => {
-          btn.addEventListener("click", function () {
-            const year = this.getAttribute("data-year");
-            setActiveYear(year);
-          });
-        });
 
         console.log("✅ Dashboard berhasil diinisialisasi");
       }
