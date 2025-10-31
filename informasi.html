@@ -501,35 +501,101 @@
 
      
 .informasi-utama {
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: 30px auto;
-}
-
-.informasi-container h2 {
-  font-size: 1.5rem;
-  color: #2c3e50;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.informasi-container p {
-  color: #555;
-  margin-bottom: 15px;
-}
-
-.informasi-embed img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  object-fit: cover;
-  display: block;
-}
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 30px auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .informasi-utama:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .informasi-container h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        .informasi-container h2::before {
+            content: "📢";
+            font-size: 1.5rem;
+        }
+        
+        .informasi-container p {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 0 10px;
+        }
+        
+        .informasi-embed {
+            margin-top: 20px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .informasi-embed img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .informasi-embed img:hover {
+            transform: scale(1.02);
+        }
+        
+        .informasi-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .informasi-utama {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            
+            .informasi-container h2 {
+                font-size: 1.5rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .informasi-container p {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .informasi-container h2 {
+                font-size: 1.3rem;
+            }
+            
+            .informasi-container p {
+                font-size: 0.95rem;
+            }
+        }
 
 
     </style>
@@ -602,22 +668,29 @@
     </section>
 -->
     <!-- Video Section -->
-    <section class="informasi-utama">
-  <div class="informasi-container">
-    <h2 aligen="center">
-      Webinar Best Practices Inovasi dan Kolaborasi ASN
-    </h2>
-    <p>Pemanfaatan Limbah Tahu Menjadi Pupuk Organik Cair dan Paving Block</p>
-    <div class="informasi-embed">
-      <img 
-  src="https://drive.google.com/uc?export=view&id=1qfqdyoAAoPnL4XSko9ygXDWnFSwUyAhp" 
-  alt="Webinar Best Practices ASN"
-  style="max-width:100%; border-radius:8px;"
->
+   <section class="informasi-utama">
+        <div class="informasi-container">
+            <h2 align="center">
+                Webinar Best Practices Inovasi dan Kolaborasi ASN
+            </h2>
+            <p>Pemanfaatan Limbah Tahu Menjadi Pupuk Organik Cair dan Paving Block</p>
+            <div class="informasi-embed">
+                <img 
+                    src="https://drive.google.com/uc?export=view&id=1qfqdyoAAoPnL4XSko9ygXDWnFSwUyAhp" 
+                    alt="Webinar Best Practices ASN"
+                >
+            </div>
+            <div class="informasi-footer">
+               Topic: Best Practice Inovasi dan Kolaborasi ASN "Pemanfaatan Limbah Tahu Menjadi Pupuk Organik Cair Dan Paving Block"
+Time: Oct 31, 2025 07:00 AM Jakarta
+Join Zoom Meeting
+https://zoom.us/j/95237745889?pwd=ZjC283qawTlKCAxRVbzKRVyhYfJ8AQ.1
 
-    </div>
-  </div>
-</section>
+Meeting ID: 952 3774 5889
+Passcode: webinar
+            </div>
+        </div>
+    </section>
 
 
       <section class="video-section">
@@ -856,6 +929,7 @@
     </script>
   </body>
 </html>
+
 
 
 
